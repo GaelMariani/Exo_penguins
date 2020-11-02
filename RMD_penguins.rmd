@@ -1,0 +1,51 @@
+---
+title: "Exo2_penguins"
+author: "Gael Mariani"
+date: "02/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data penguins
+
+Data on __penguins__ with size measurements for three penguin species observed on island in Palmer Archipelago, size (flipper length, body mass, bill dimensions), and sex. 
+
+```{r echo = FALSE, include = FALSE}
+library(palmerpenguins)
+library(tidyverse)
+library(ggplot2)
+library(citr)
+```
+
+```{r echo = FALSE, eval = TRUE}
+penguins %>%
+  head(10) %>%
+  knitr::kable(format = "html", caption = "Head of the first ten lines of the __penguins__ dataset")
+```  
+<br/>
+
+The dataset contains measurements on `r nrow(penguins)` individuals belonging to `r length(unique(penguins$species))` differents species. The average value of each measured traits by species is found in Table 2. 
+
+```{r echo = FALSE, eval = TRUE}
+penguins %>%
+  group_by(species) %>% 
+  summarise_if(is.numeric, mean, na.rm=T) %>%
+  select(-"year") %>%
+  knitr::kable(format = "html", caption = "Table 2: Average value by species of the bill length, the bill depth and the flipper length (millimeters) and the body mass (grams) ")
+```  
+
+
+## Graphic exploration
+```{r echos = TRUE, message = FALSE, warning=FALSE}
+penguins %>%
+  select(c("species", "body_mass_g")) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = body_mass_g, color = species, fill = species), 
+                 alpha = 0.3, position = "identity") +
+  theme_bw()
+```
+
+
